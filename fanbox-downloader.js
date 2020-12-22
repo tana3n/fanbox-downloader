@@ -42,11 +42,11 @@ getFile = function(url, filename) {
     });
 }
 getDiff = function(){
-    a=document.querySelector('.sc-1vjtieq-17.bnlkzd').querySelectorAll(".bej7gp-1.fsXvuu").length
+    a=document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".bej7gp-1.fsXvuu").length
     return (''+a).padStart(2,'0')
 }
 getSrcURL = function(getnum){
-    return document.querySelector('.sc-1vjtieq-17.bnlkzd').querySelectorAll(".bej7gp-1.fsXvuu")[getnum].querySelector('a').getAttribute('href')
+    return document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".bej7gp-1.fsXvuu")[getnum].querySelector('a').getAttribute('href')
 }
 dl = function(){
     var diff = getDiff();
