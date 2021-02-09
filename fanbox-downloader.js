@@ -1,4 +1,4 @@
-var getSrcURL,　getExttype,　getDiff, getFile, BT, dl;
+var getSrcURL,　getExttype,　getDiff, getFile, BT, dl, dl2, gettext,  getFilename2;
 var getTitle, getPageID, getFilename, getDiffmacro, getfbName,getfbID
 getfbName = function(){
 return document.querySelector('h1 a').text
@@ -27,7 +27,7 @@ getFilename = function(getnum){
     //ここをなんとかしたい2020
     s=getfbName()+String('(')+getfbID()+String(') - ')+getTitle()+String('(')+getPageID()+String(')')
     s=s.replace('/\//g',"／")
-    if(getDiff()==1){
+    if(getDiff()<=1){
     return s
     }
     else{
@@ -50,6 +50,7 @@ getSrcURL = function(getnum){
 }
 dl = function(){
     var diff = getDiff();
+    console.log(diff);
     for(var num = 0; num < diff ; num++){
       var filename = getFilename(num);
       var url = getSrcURL(num);
@@ -59,7 +60,41 @@ dl = function(){
       getFile(url,filename);
   }
   }
+gettext = function(){
+    const texts=[];
+    s=document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
+    diff=s.length
+        for(var num = 0; num < diff ; num++){
+        t=s[num].textContent;
+        texts.push(t);
+}
+    texts2=texts.join('\n');
+    return texts2
+}
+
+getFilename2 = function(getnum){
+    //ここをなんとかしたい2020
+    s=getfbName()+String('(')+getfbID()+String(') - ')+getTitle()+String('(')+getPageID()+String(')')
+    s=s.replace('/\//g',"／")
+    if(getDiff()==1){
+    return s
+    }
+    else{
+    return String("fanbox-download/")+s+String(' [')+ (''+(getnum+1)).padStart(2,'0') +String(' - ')+getDiff()+String(']')
+    }
+}
+
+dl2 = function(){
+    console.log(gettext())
+    const blob2 = new Blob([gettext()], { type: "text/plain" });
+    const blob3 = URL.createObjectURL(blob2)
+    var filename ="fanbox-download/"+getFilename(0)+".txt";
+    console.log(filename)
+    getFile(blob3,filename)
+    URL.revokeObjectURL(blob2)
+}
   chrome.runtime.onMessage.addListener(function(request,sender){
     dl()
+    dl2()
   }
 );
