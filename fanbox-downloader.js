@@ -40,7 +40,7 @@ getSrcURL = function(getnum){
 }
 
 getText = function(){
-    if (document.querySelector('.sc-16ys89y-0.jWzPaa')!=""){
+    if (document.querySelector('.sc-16ys89y-0.jWzPaa')){
         text = document.querySelector('.sc-16ys89y-0.jWzPaa').innerHTML
     }else{
         s=document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
@@ -89,7 +89,6 @@ getFile = function(url, filename) {
 
 dl = function(){
     var diff = getDiff();
-    console.log(diff);
     for(var num = 0; num < diff ; num++){
         var filename = getFilename(num);
         if(diff > 1){//差分が存在する時のリネーム処理
