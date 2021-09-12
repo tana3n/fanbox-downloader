@@ -33,5 +33,9 @@
     ],
     "web_accessible_resources": [
     "icon_32.png"
-  ]
+  ],
+  "options_ui":{
+    "page":"settings.html"
+  }
+
 }
