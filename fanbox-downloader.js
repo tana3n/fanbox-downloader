@@ -1,5 +1,5 @@
-var getSrcURL, getExttype, getDiff, getFile, dl, dlText, getText, dlAttr
-var getTitle, getPageID, getFilename, getfanboxName, getfanboxID
+var getSrcURL, getExttype, getDiff, getFile, getTitle, getPageID, getfanboxName, getfanboxID
+var getFilename, dl, dlText, getText, dlAttr//, getStorage
 
 getfanboxName = function(){
     return document.querySelector('h1 a').text
@@ -20,12 +20,24 @@ getTitle = function(){
     return document.querySelector("article h1").textContent.replace(/\u002f/g, '／')
 }
 
-getFilename = function(){
+getFilename = function(diff){
     //ここをなんとかしたい2020
-    s=getfanboxName()+String('(')+getfanboxID()+String(') - ')+getTitle()+String('(')+getPageID()+String(')')
-    s=s.replace('/\//g',"／")
-    return "fanbox-downloader/" + s
+    query="fanbox-downloader/$fanboxname$($fanboxID$) - $Title$($PageID$)"//ここはstorage.sync.getで運用したいところ
+    if(getDiff() > 1){
+        query="fanbox-downloader/$fanboxname$($fanboxID$) - $Title$($PageID$) [$Diff$ - $DiffCount$]"
+    }
+
+    query=query.replace('$fanboxname$',getfanboxName())
+    query=query.replace('$fanboxID$',getfanboxID())
+    query=query.replace('$Title$',getTitle())
+    query=query.replace('$PageID$',getPageID())
+    if(getDiff() > 1){
+        query=query.replace('$DiffCount$',getDiff())
+        query=query.replace('$Diff$',(''+(diff+1)).padStart(2,'0'))
+    }
+    return query.replace('/\//g',"／")
 }
+
 getExttype = function(URL){
     return URL.split("/").reverse()[0].split('.')[1];
 }
@@ -90,21 +102,35 @@ getFile = function(url, filename) {
 dl = function(){
     var diff = getDiff();
     for(var num = 0; num < diff ; num++){
-        var filename = getFilename(num);
-        if(diff > 1){//差分が存在する時のリネーム処理
-            filename = filename + String(' [')+ (''+(num+1)).padStart(2,'0') + String(' - ') + getDiff() + String(']')
-        }
         var url = getSrcURL(num);
-        filename = filename + '.' + getExttype(url)
+        var filename = getFilename(num) + '.' + getExttype(url);
         console.log(filename);
         console.log(url);
         getFile(url,filename);
     }
 }
+function save_settings(){
+    var txt = false//document.getElementById(text).value
+    var attr = false//document.getElementById(attr).value
+    chrome.storage.local.set({savetext: txt, saveattr: attr}, function() {
+        console.log('Value is set to ' + txt + " and " +attr);
+  });
+}
 
-  chrome.runtime.onMessage.addListener(function(request,sender){
+//save_settings()
+
+chrome.runtime.onMessage.addListener(function(request,sender){
     dl()
-    dlText()
-    dlAttr()
-  }
+    chrome.storage.local.get(['savetext','saveattr'],function(str){
+        console.log(str.savetext + " , " + str.savetext)
+        if(str.savetext !== false){
+            console.log("Enabled SaveText")
+            dlText()
+        }
+        if(str.saveattr !== false){
+            console.log("Enabled SaveAttributes")
+            dlAttr()
+        }
+    })
+}
 )
