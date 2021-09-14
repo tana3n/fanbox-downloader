@@ -29,20 +29,19 @@ getFilename2 = function(query){
 }
 
 getFilename = function(diff){
-    if(getDiff() > 1 & diff >= 0){
-            var query=getFilename2(macro2)
-            query=query.replaceAll('$DiffCount$',getDiff())
-            query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'))
-            return query    
-        } else if(getDiff()==1 |diff == -1) {
-            query = getFilename2(macro)
-    } else if(diff == -2){
-            query = getFilename2(macro3)
-            t = document.querySelector('[download]').getAttribute('download')
-            query = query.replaceAll('$AttrName$',t)
+    if (getDiff() > 1 & diff >= 0) {
+        var query=getFilename2(macro2)
+        query=query.replaceAll('$DiffCount$',getDiff())
+        query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'))
+        return query    
+    } else if (getDiff()==1 |diff == -1) {
+        query = getFilename2(macro)
+    } else if (diff == -2) {
+        query = getFilename2(macro3)
+        t = document.querySelector('[download]').getAttribute('download')
+        query = query.replaceAll('$AttrName$',t)
     }
     return query
-
 }
 
 getExttype = function(URL){
@@ -59,9 +58,9 @@ getSrcURL = function(getnum){
 }
 
 getText = function(){
-    if (document.querySelector('.sc-16ys89y-0.jWzPaa')){
+    if (document.querySelector('.sc-16ys89y-0.jWzPaa')) {
         text = document.querySelector('.sc-16ys89y-0.jWzPaa').innerHTML
-    }else{
+    } else {
         s=document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
         const texts=[]
         for(var num = 0; num < s.length ; num++){
