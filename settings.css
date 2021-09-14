@@ -4,5 +4,20 @@ label, input[type='checkbox'] {
 }
 .main{
     user-select: none;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: bold;
     }
+.sub{
+    font-size: 14px;
+}
+.macrolist{
+    border-collapse: collapse;
+    border: 2px;
+    background-color: #e6e6fa;
+}
+.list-t{
+    background-color: #ff99cf;
+    border: 2px #ffffff;
+
+}
+
