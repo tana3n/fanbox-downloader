@@ -38,8 +38,7 @@ getFilename = function(diff){
         query = getFilename2(macro)
     } else if (diff == -2) {
         query = getFilename2(macro3)
-        t = document.querySelector('[download]').getAttribute('download')
-        query = query.replaceAll('$AttrName$',t)
+
     }
     return query
 }
@@ -83,12 +82,15 @@ dlText = function(){
 }
 
 dlAttr = function(){
-    Attr = document.querySelector('[download]')
+    Attr = document.querySelectorAll('[download]')
     if (Attr!= null){
-        s2 = Attr.getAttribute('href')
-        t = Attr.getAttribute('download')
-        filename=getFilename(-2) + '.' + getExttype(s2)
+        for (var num = 0; num<Attr.length; num++){
+        s2 = Attr[num].getAttribute('href')
+        t = Attr[num].getAttribute('download')
+        query=getFilename(-2) + '.' + getExttype(s2)
+        filename = query.replaceAll('$AttrName$',t)
         getFile(s2,filename)
+        }
     }
 }
 
