@@ -39,9 +39,9 @@ function clear_settings(){
 function initialize_settings(){
     document.getElementById('txt').checked = true
     document.getElementById('attr').checked = true
-    document.getElementById('macro').value = "fanbox-downloader/$fanboxname$($fanboxID$) - $Title$($PageID$)"
-    document.getElementById('macro2').value = "fanbox-downloader/$fanboxname$($fanboxID$) - $Title$($PageID$) [$Diff$ - $DiffCount$]"
-    document.getElementById('macro3').value = "fanbox-downloader/$fanboxname$($fanboxID$) - $Title$($PageID$)"
+    document.getElementById('macro').value = "fanbox-downloader/$fanboxname$($fanboxID$)/$fanboxname$($fanboxID$) - $Title$($PageID$)"
+    document.getElementById('macro2').value = "fanbox-downloader/$fanboxname$($fanboxID$)/$fanboxname$($fanboxID$) - $Title$($PageID$) [$Diff$ - $DiffCount$]"
+    document.getElementById('macro3').value = "fanbox-downloader/$fanboxname$($fanboxID$)/$fanboxname$($fanboxID$) - $Title$($PageID$) - $AttrName$"
 }
 
 document.addEventListener('DOMContentLoaded', load_settings);
