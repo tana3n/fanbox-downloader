@@ -1,6 +1,7 @@
   //コンテキスト表示
+  chrome.runtime.onInstalled.addListener(function () {
   chrome.contextMenus.create({
-    'id' : "mkcM",
+    'id' : "fbdl",
     'title' : 'fanbox-downloader',
     'type' : 'normal',
     "contexts" : ["page"],
@@ -10,13 +11,12 @@
       chrome.extention.sendMessage({type: 'get'});
     }*/
   });
+  })
 //選択時のイベント
 chrome.contextMenus.onClicked.addListener(function (info,tab) {
-  console.log('sendMessage')
  // if (info.menuItemId === 'nkcM'){
   chrome.tabs.query( {active:true, currentWindow:true}, function(tabs){
     chrome.tabs.sendMessage(tabs[0].id,{message: 'getImage'})
-  console.log('sentMessage')
 });
   
   //}
