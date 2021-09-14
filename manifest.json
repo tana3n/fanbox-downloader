@@ -12,9 +12,7 @@
     },
     "content_scripts": [
         {
-          "matches": [
-            "https://*.fanbox.cc/posts/*",
-            "https://*.fanbox.cc/*/posts/*"],
+          "matches": ["https://*.fanbox.cc/*"],
           "js": ["fanbox-downloader.js"]
         }
       ],
