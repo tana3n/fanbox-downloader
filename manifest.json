@@ -1,7 +1,7 @@
   {
     "manifest_version": 2,
     "name": "fanbox-downloader",
-    "description": "PIXIV FANBOXの作品ページで画像DL出来るようにする物",
+    "description": "PIXIV FANBOXの作品ページから今すぐダウンロード",
     "version": "1.1.0",
     "author": "tana3n",
     "icons": {
