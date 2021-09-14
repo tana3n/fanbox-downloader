@@ -1,5 +1,5 @@
 var getSrcURL, getExttype, getDiff, getFile, getTitle, getPageID, getfanboxName, getfanboxID
-var getFilename, dl, dlText, getText, dlAttr//, getStorage
+var getFilename, getFilename2, dl, dlText, getText, dlAttr//, getStorage
 
 getfanboxName = function(){
     return document.querySelector('h1 a').text
@@ -20,22 +20,29 @@ getTitle = function(){
     return document.querySelector("article h1").textContent.replace(/\u002f/g, '／')
 }
 
-getFilename = function(diff){
-    //ここをなんとかしたい2020
-    query="fanbox-downloader/$fanboxname$($fanboxID$) - $Title$($PageID$)"//ここはstorage.sync.getで運用したいところ
-    if(getDiff() > 1){
-        query="fanbox-downloader/$fanboxname$($fanboxID$) - $Title$($PageID$) [$Diff$ - $DiffCount$]"
-    }
+getFilename2 = function(query){
+    query=query.replaceAll('$fanboxname$',getfanboxName())
+    query=query.replaceAll('$fanboxID$',getfanboxID())
+    query=query.replaceAll('$Title$',getTitle())
+    query=query.replaceAll('$PageID$',getPageID())
+    return query.replaceAll('/\//g',"／")
+}
 
-    query=query.replace('$fanboxname$',getfanboxName())
-    query=query.replace('$fanboxID$',getfanboxID())
-    query=query.replace('$Title$',getTitle())
-    query=query.replace('$PageID$',getPageID())
-    if(getDiff() > 1){
-        query=query.replace('$DiffCount$',getDiff())
-        query=query.replace('$Diff$',(''+(diff+1)).padStart(2,'0'))
+getFilename = function(diff){
+    if(getDiff() > 1 & diff >= 0){
+            var query=getFilename2(macro2)
+            query=query.replaceAll('$DiffCount$',getDiff())
+            query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'))
+            return query    
+        } else if(getDiff()==1 |diff == -1) {
+            query = getFilename2(macro)
+    } else if(diff == -2){
+            query = getFilename2(macro3)
+            t = document.querySelector('[download]').getAttribute('download')
+            query = query.replaceAll('$AttrName$',t)
     }
-    return query.replace('/\//g',"／")
+    return query
+
 }
 
 getExttype = function(URL){
@@ -66,11 +73,10 @@ getText = function(){
 }
 
 dlText = function(){
-    //console.log(getText())
     if(getText()!=""){
         const blob2 = new Blob([getText()], { type: "text/plain" });
         const blob3 = URL.createObjectURL(blob2)
-        var filename =getFilename() + ".txt";
+        var filename =getFilename(-1) + ".txt";
         getFile(blob3,filename)
         URL.revokeObjectURL(blob2)
         console.log(filename)
@@ -78,16 +84,12 @@ dlText = function(){
 }
 
 dlAttr = function(){
-    try {
-        Attr = document.querySelector('[download]')
+    Attr = document.querySelector('[download]')
+    if (Attr!= null){
         s2 = Attr.getAttribute('href')
         t = Attr.getAttribute('download')
-        filename=getFilename()+" - " + t +  "." + getExttype(s2)
+        filename=getFilename(-2) + '.' + getExttype(s2)
         getFile(s2,filename)
-    }
-    catch(e){
-        //console.log("Attribute URL not Found")
-        //もう少しいい書き方ありそう
     }
 }
 
@@ -109,20 +111,13 @@ dl = function(){
         getFile(url,filename);
     }
 }
-function save_settings(){
-    var txt = false//document.getElementById(text).value
-    var attr = false//document.getElementById(attr).value
-    chrome.storage.local.set({savetext: txt, saveattr: attr}, function() {
-        console.log('Value is set to ' + txt + " and " +attr);
-  });
-}
-
-//save_settings()
 
 chrome.runtime.onMessage.addListener(function(request,sender){
-    dl()
-    chrome.storage.local.get(['savetext','saveattr'],function(str){
-        console.log(str.savetext + " , " + str.savetext)
+    chrome.storage.local.get(['savetext','saveattr', 'macro', 'macro2', 'macro3'],function(str){
+        globalThis.macro=str.macro
+        globalThis.macro2=str.macro2
+        globalThis.macro3=str.macro3
+        dl()
         if(str.savetext !== false){
             console.log("Enabled SaveText")
             dlText()

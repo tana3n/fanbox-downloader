@@ -1,0 +1,8 @@
+label, input[type='checkbox'] {
+    cursor: pointer;
+    user-select: none;
+}
+.main{
+    user-select: none;
+    font-size: 14px;
+    }
