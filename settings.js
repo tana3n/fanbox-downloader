@@ -23,7 +23,7 @@ function load_settings(){
         document.getElementById('macro').value = load.macro
         document.getElementById('macro2').value = load.macro2
         document.getElementById('macro3').value = load.macro3
-        if(load.macro=="undefined"){
+        if(load.macro==undefined){
             initialize_settings()
             console.log("Initializing Settings")
         }
