@@ -115,17 +115,22 @@ dl = function(){
 
 chrome.runtime.onMessage.addListener(function(request,sender){
     chrome.storage.local.get(['savetext','saveattr', 'macro', 'macro2', 'macro3'],function(str){
-        globalThis.macro=str.macro
-        globalThis.macro2=str.macro2
-        globalThis.macro3=str.macro3
-        dl()
-        if(str.savetext !== false){
-            console.log("Enabled SaveText")
-            dlText()
-        }
-        if(str.saveattr !== false){
-            console.log("Enabled SaveAttributes")
-            dlAttr()
+        if (str.macro==undefined) {
+            alert("fanbox-downloader：オプションから設定を行ってください");            
+        } 
+        else{
+            globalThis.macro=str.macro
+            globalThis.macro2=str.macro2
+            globalThis.macro3=str.macro3
+            dl()
+            if(str.savetext !== false){
+                console.log("Enabled SaveText")
+                dlText()
+            }
+            if(str.saveattr !== false){
+                console.log("Enabled SaveAttributes")
+                dlAttr()
+            }
         }
     })
 }
