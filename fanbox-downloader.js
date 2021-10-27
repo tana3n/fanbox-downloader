@@ -48,19 +48,19 @@ getExttype = function(URL){
 }
 
 getDiff = function(){
-    a=document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".bej7gp-1.fsXvuu").length
+    a=document.querySelector('.sc-1vjtieq-15').querySelectorAll(".sc-bej7gp-1").length
     return (''+a).padStart(2,'0')
 }
 
 getSrcURL = function(getnum){
-    return document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".bej7gp-1.fsXvuu")[getnum].querySelector('a').getAttribute('href')
+    return document.querySelector('.sc-1vjtieq-15').querySelectorAll(".sc-bej7gp-1")[getnum].querySelector('a').getAttribute('href')
 }
 
 getText = function(){
-    if (document.querySelector('.sc-16ys89y-0.jWzPaa')) {
-        text = document.querySelector('.sc-16ys89y-0.jWzPaa').innerHTML
+    if (document.querySelector('.sc-16ys89y-0')) {
+        text = document.querySelector('.sc-16ys89y-0').innerHTML
     } else {
-        s=document.querySelector('.sc-1vjtieq-15.ctPdwn').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
+        s=document.querySelector('.sc-1vjtieq-15').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
         const texts=[]
         for(var num = 0; num < s.length ; num++){
             texts.push(s[num].textContent);
@@ -95,7 +95,7 @@ dlAttr = function(){
 }
 
 getFile = function(url, filename) {
-    return chrome.extension.sendMessage({
+    return chrome.runtime.sendMessage({
      type: 'download',
      url: url,
      filename: filename
@@ -104,6 +104,7 @@ getFile = function(url, filename) {
 
 dl = function(){
     var diff = getDiff();
+    console.log(diff)
     for(var num = 0; num < diff ; num++){
         var url = getSrcURL(num);
         var filename = getFilename(num) + '.' + getExttype(url);
@@ -112,7 +113,6 @@ dl = function(){
         getFile(url,filename);
     }
 }
-
 chrome.runtime.onMessage.addListener(function(request,sender){
     chrome.storage.local.get(['savetext','saveattr', 'macro', 'macro2', 'macro3'],function(str){
         if (str.macro==undefined) {
