@@ -23,9 +23,10 @@ chrome.contextMenus.onClicked.addListener(function (info,tab) {
 });
 
 //とりあえずこれで受けられてるのでこのままで
-chrome.extension.onMessage.addListener(function(request) {
+chrome.runtime.onMessage.addListener(function(request) {
     chrome.downloads.download({
       url: request.url,
       filename: request.filename
     });
+    return true;
 });

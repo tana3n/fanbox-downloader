@@ -17,8 +17,7 @@
         }
       ],
       "background": {
-        "scripts": ["event_page.js"],
-        "persistent": false
+        "scripts": ["event_page.js"]
       },
     "permissions": [
         "downloads",
