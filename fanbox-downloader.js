@@ -1,10 +1,7 @@
-var getSrcURL, getExttype, getDiff, getFile, getTitle, getPageID, getfanboxName, getfanboxID
-var getFilename, getFilename2, dl, dlText, getText, dlAttr//, getStorage
-
-getfanboxName = function(){
+function getfanboxName(){
     return document.querySelector('h1 a').text
 }
-getfanboxID　=　function(){
+function getfanboxID(){
     if　(location.hostname==("www.fanbox.cc")){
         s=location.pathname.match(/(?<=@)(.*)(?=\/posts)/)//@以降を取得
         return s[0]
@@ -12,51 +9,50 @@ getfanboxID　=　function(){
         return location.hostname.replace('.fanbox.cc','')//こっちはサブドメインを取得すればOK
     }
 }
-getPageID = function(){
+function getPageID(){
     s=location.pathname.match(/(?<=\/posts\/)[0-9]*/)
     return s[0]
 }
-getTitle = function(){
+function getTitle(){
     return document.querySelector("article h1").textContent.replace(/\u002f/g, '／')
 }
 
-getFilename2 = function(query){
+function getFilename2(query){
     query=query.replaceAll('$fanboxname$',getfanboxName())
     query=query.replaceAll('$fanboxID$',getfanboxID())
     query=query.replaceAll('$Title$',getTitle())
     query=query.replaceAll('$PageID$',getPageID())
+    query=query.replaceAll(':',"：")
     return query.replaceAll('/\//g',"／")
 }
 
-getFilename = function(diff){
+function getFilename(diff){
     if (getDiff() > 1 & diff >= 0) {
         var query=getFilename2(macro2)
         query=query.replaceAll('$DiffCount$',getDiff())
         query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'))
-        return query    
     } else if (getDiff()==1 |diff == -1) {
         query = getFilename2(macro)
     } else if (diff == -2) {
         query = getFilename2(macro3)
-
     }
     return query
 }
 
-getExttype = function(URL){
+function getExttype(URL){
     return URL.split("/").reverse()[0].split('.')[1];
 }
 
-getDiff = function(){
+function getDiff(){
     a=document.querySelector('.sc-1vjtieq-15').querySelectorAll(".sc-bej7gp-1").length
     return (''+a).padStart(2,'0')
 }
 
-getSrcURL = function(getnum){
+function getSrcURL(getnum){
     return document.querySelector('.sc-1vjtieq-15').querySelectorAll(".sc-bej7gp-1")[getnum].querySelector('a').getAttribute('href')
 }
 
-getText = function(){
+function getText(){
     if (document.querySelector('.sc-16ys89y-0')) {
         text = document.querySelector('.sc-16ys89y-0').innerHTML
     } else {
@@ -70,18 +66,28 @@ getText = function(){
     return text
 }
 
-dlText = function(){
+function dlText(){
     if(getText()!=""){
         const blob2 = new Blob([getText()], { type: "text/plain" });
-        const blob3 = URL.createObjectURL(blob2)
-        var filename =getFilename(-1) + ".txt";
-        getFile(blob3,filename)
-        URL.revokeObjectURL(blob2)
-        console.log(filename)
+        var filename = getFilename(-1) + ".txt";
+        if (isChrominum() == true ){
+            console.log("SetFlag: Chrominum")
+            const blob3 = URL.createObjectURL(blob2)
+            console.log(blob3)
+            getFile("download",blob3,filename)
+            //URL.revokeObjectURL(blob3)
+        } else {
+            chrome.runtime.sendMessage({
+                type: "blob",
+                blob: blob2,
+                filename: filename
+               });
+        } 
+
     }
 }
 
-dlAttr = function(){
+function dlAttr(){
     Attr = document.querySelectorAll('[download]')
     if (Attr!= null){
         for (var num = 0; num<Attr.length; num++){
@@ -89,45 +95,56 @@ dlAttr = function(){
         t = Attr[num].getAttribute('download')
         query=getFilename(-2) + '.' + getExttype(s2)
         filename = query.replaceAll('$AttrName$',t)
-        getFile(s2,filename)
+        getFile("download", s2, filename)
         }
     }
 }
 
-getFile = function(url, filename) {
+function getFile(type, url, filename){
     return chrome.runtime.sendMessage({
-     type: 'download',
+     type: type,
      url: url,
      filename: filename
     });
 }
 
-dl = function(){
+function dl(){
     var diff = getDiff();
-    console.log(diff)
     for(var num = 0; num < diff ; num++){
         var url = getSrcURL(num);
         var filename = getFilename(num) + '.' + getExttype(url);
         console.log(filename);
         console.log(url);
-        getFile(url,filename);
+        getFile("download",url,filename);
     }
 }
+
+
+function isChrominum(){
+    var s = chrome.runtime.getURL("")
+    if ( /chrome/.test(s) == true ) {
+        return true
+    }
+    else return false;
+}
+
+
 chrome.runtime.onMessage.addListener(function(request,sender){
     chrome.storage.local.get(['savetext','saveattr', 'macro', 'macro2', 'macro3'],function(str){
         if (str.macro==undefined) {
-            alert("fanbox-downloader：オプションから設定を行ってください");            
+            alert("fanbox-downloader：オプションから設定を行ってください");    
+            return chrome.runtime.sendMessage({type: "set"});
         } 
         else{
             globalThis.macro=str.macro
             globalThis.macro2=str.macro2
             globalThis.macro3=str.macro3
             dl()
-            if(str.savetext !== false){
+            if(str.savetext == true){
                 console.log("Enabled SaveText")
                 dlText()
             }
-            if(str.saveattr !== false){
+            if(str.saveattr == true){
                 console.log("Enabled SaveAttributes")
                 dlAttr()
             }

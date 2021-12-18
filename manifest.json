@@ -2,13 +2,10 @@
     "manifest_version": 2,
     "name": "fanbox-downloader",
     "description": "PIXIV FANBOXの作品ページから今すぐダウンロード",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "author": "tana3n",
     "icons": {
-        "16": "icon_32.png",
-        "32": "icon_32.png",
-        "48": "icon_32.png",
-        "128": "icon_32.png"
+        "32": "icon_32.png"
     },
     "content_scripts": [
         {
@@ -24,9 +21,7 @@
         "storage",
         "tabs",
         "contextMenus",
-        "https://*.fanbox.cc/posts/*",
-        "https://*.fanbox.cc/*/posts/*"
-
+        "*://*.fanbox.cc/*"
     ],
     "web_accessible_resources": [
     "icon_32.png"

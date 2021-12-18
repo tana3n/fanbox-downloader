@@ -1,6 +1,6 @@
-  //コンテキスト表示
-  chrome.runtime.onInstalled.addListener(function () {
-  chrome.contextMenus.create({
+//コンテキスト表示
+chrome.runtime.onInstalled.addListener(function () {
+chrome.contextMenus.create({
     'id' : "fbdl",
     'title' : 'fanbox-downloader',
     'type' : 'normal',
@@ -11,22 +11,34 @@
       chrome.extention.sendMessage({type: 'get'});
     }*/
   });
-  })
+})
+
 //選択時のイベント
 chrome.contextMenus.onClicked.addListener(function (info,tab) {
- // if (info.menuItemId === 'nkcM'){
   chrome.tabs.query( {active:true, currentWindow:true}, function(tabs){
     chrome.tabs.sendMessage(tabs[0].id,{message: 'getImage'})
-});
-  
-  //}
+  });
 });
 
-//とりあえずこれで受けられてるのでこのままで
+//直リンに出来ない物は一度storageに投げた方がよさそう
 chrome.runtime.onMessage.addListener(function(request) {
-    chrome.downloads.download({
-      url: request.url,
-      filename: request.filename
-    });
-    return true;
+  if(request.type=="download"){
+    console.log(request.filename)
+    download(request.url,request.filename)
+    }
+  else if(request.type=="blob"){
+    const blob = URL.createObjectURL(request.blob)
+    download(blob,request.filename)
+  }
+  else if(request.type=="set"){
+    chrome.runtime.openOptionsPage();//background.jsから発火する必要がある
+  }
+  return true;
 });
+
+function download(url,filename){
+  chrome.downloads.download({
+    url: url,
+    filename: filename
+    });
+}
