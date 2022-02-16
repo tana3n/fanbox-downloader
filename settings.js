@@ -26,6 +26,7 @@ function load_settings(){
         if(load.macro==undefined){
             initialize_settings()
             console.log("Initializing Settings")
+            return null
         }
         console.log('Done: load_settings()');
       });
@@ -36,6 +37,7 @@ function clear_settings(){
     location.reload();
 })
 }
+
 function initialize_settings(){
     document.getElementById('txt').checked = true
     document.getElementById('attr').checked = true
