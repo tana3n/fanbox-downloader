@@ -1,5 +1,4 @@
 //コンテキスト表示
-chrome.runtime.onInstalled.addListener(function () {
 chrome.contextMenus.create({
     'id' : "fbdl",
     'title' : 'fanbox-downloader',
@@ -11,7 +10,6 @@ chrome.contextMenus.create({
       chrome.extention.sendMessage({type: 'get'});
     }*/
   });
-})
 
 //選択時のイベント
 chrome.contextMenus.onClicked.addListener(function (info,tab) {
@@ -27,6 +25,7 @@ chrome.runtime.onMessage.addListener(function(request) {
     download(request.url,request.filename)
     }
   else if(request.type=="blob"){
+
     const blob = URL.createObjectURL(request.blob)
     download(blob,request.filename)
   }
