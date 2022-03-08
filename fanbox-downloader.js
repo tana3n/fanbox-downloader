@@ -44,19 +44,19 @@ function getExttype(URL){
 }
 
 function getDiff(){
-    a=document.querySelector('.sc-1vjtieq-15').querySelectorAll(".sc-bej7gp-1").length
+    a=document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1').length
     return (''+a).padStart(2,'0')
 }
 
 function getSrcURL(getnum){
-    return document.querySelector('.sc-1vjtieq-15').querySelectorAll(".sc-bej7gp-1")[getnum].querySelector('a').getAttribute('href')
+    return  document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1')[getnum].getAttribute('href')
 }
 
 function getText(){
     if (document.querySelector('.sc-16ys89y-0')) {
         text = document.querySelector('.sc-16ys89y-0').innerHTML
     } else {
-        s=document.querySelector('.sc-1vjtieq-15').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
+        s=document.querySelector('.sc-1vjtieq-1').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
         const texts=[]
         for(var num = 0; num < s.length ; num++){
             texts.push(s[num].textContent);
