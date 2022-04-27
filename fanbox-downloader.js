@@ -53,6 +53,7 @@ function getFilename(diff){
 function getDate(query, custom){
     src = document.querySelector(".sc-1vjtieq-3.emomCe").innerText;
     replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
+    replaced[2] = parseInt(replaced[2]) - 1;
     if( (custom == true) & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして+24hする
             replaced[3] = parseInt(replaced[3]) - 1;
             replaced[4] = parseInt(replaced[4]) + 24;
@@ -61,12 +62,11 @@ function getDate(query, custom){
     replaced =[
         replaced[0],
         dates.getFullYear().toString(),
-        dates.getMonth().toString(),
+        (parseInt(dates.getMonth())+ 1).toString(),
         dates.getDate().toString(),
         replaced[4].toString(),
         replaced[5].toString()
         ];
-    console.log(replaced[query])
     return replaced[query].padStart(2,'0');
 }
 function getExttype(URL){
