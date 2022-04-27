@@ -1,47 +1,47 @@
 function getfanboxName(){
-    return document.querySelector('h1 a').text
+    return document.querySelector('h1 a').text；
 }
 function getfanboxID(){
     if　(location.hostname==("www.fanbox.cc")){
-        s=location.pathname.match(/(?<=@)(.*)(?=\/posts)/)//@以降を取得
-        return s[0]
+        s=location.pathname.match(/(?<=@)(.*)(?=\/posts)/);//@以降を取得
+        return s[0];
     }else{
-        return location.hostname.replace('.fanbox.cc','')//こっちはサブドメインを取得すればOK
+        return location.hostname.replace('.fanbox.cc','');//こっちはサブドメインを取得すればOK
     }
 }
 function getPageID(){
-    s=location.pathname.match(/(?<=\/posts\/)[0-9]*/)
-    return s[0]
+    pageID=location.pathname.match(/(?<=\/posts\/)[0-9]*/);
+    return pageID[0];
 }
 function getTitle(){
-    return document.querySelector("article h1").textContent.replace(/\u002f/g, '／')
+    return document.querySelector("article h1").textContent.replace(/\u002f/g, '／');
 }
 
 function getFilename2(query){
-    query=query.replaceAll('$fanboxname$',getfanboxName())
-    query=query.replaceAll('$fanboxID$',getfanboxID())
-    query=query.replaceAll('$Title$',getTitle())
-    query=query.replaceAll('$PageID$',getPageID())
-    query=query.replaceAll('$YYYY$',getDate(1))
-    query=query.replaceAll('$MM$',getDate(2))
-    query=query.replaceAll('$DD$',getDate(3))
-    query=query.replaceAll('$hh$',getDate(4))
-    query=query.replaceAll('$mm$',getDate(5))
-    query=query.replaceAll(':',"：")
-    return query.replaceAll('/\//g',"／")
+    query=query.replaceAll('$fanboxname$',getfanboxName());
+    query=query.replaceAll('$fanboxID$',getfanboxID());
+    query=query.replaceAll('$Title$',getTitle());
+    query=query.replaceAll('$PageID$',getPageID());
+    query=query.replaceAll('$YYYY$',getDate(1));
+    query=query.replaceAll('$MM$',getDate(2));
+    query=query.replaceAll('$DD$',getDate(3));
+    query=query.replaceAll('$hh$',getDate(4));
+    query=query.replaceAll('$mm$',getDate(5));
+    query=query.replaceAll(':',"：");
+    return query.replaceAll('/\//g',"／");
 }
 
 function getFilename(diff){
     if (getDiff() > 1 & diff >= 0) {
-        var query=getFilename2(macro2)
-        query=query.replaceAll('$DiffCount$',getDiff())
-        query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'))
+        var query=getFilename2(macro2);
+        query=query.replaceAll('$DiffCount$',getDiff());
+        query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'));
     } else if (getDiff()==1 |diff == -1) {
-        query = getFilename2(macro)
+        query = getFilename2(macro);
     } else if (diff == -2) {
-        query = getFilename2(macro3)
+        query = getFilename2(macro3);
     }
-    return query
+    return query;
 }
 
 function getDate(query){
@@ -54,27 +54,27 @@ function getExttype(URL){
 }
 
 function getDiff(){
-    a=document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1').length
-    return (''+a).padStart(2,'0')
+    a=document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1').length;
+    return (''+a).padStart(2,'0');
 }
 
 function getSrcURL(getnum){
-    return  document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1')[getnum].getAttribute('href')
+    return  document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1')[getnum].getAttribute('href');
 }
 
 function getText(){
     if (document.querySelector('.sc-16ys89y-0')) {
-        text = document.querySelector('.sc-16ys89y-0').innerHTML
+        text = document.querySelector('.sc-16ys89y-0').innerHTML;
     } else if(document.querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")){
-        s=document.querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
-        const texts=[]
+        s=document.querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr");
+        const texts=[];
         
         for(var num = 0; num < s.length ; num++){
             texts.push(s[num].textContent);
         }
         text = texts.join('\n');
     }
-    return text
+    return text;
 }
 
 function dlText(){
@@ -82,10 +82,10 @@ function dlText(){
         const blob2 = new Blob([getText()], { type: "text/plain" });
         var filename = getFilename(-1) + ".txt";
         if (isChrominum() == true ){
-            console.log("SetFlag: Chrominum")
-            const blob3 = URL.createObjectURL(blob2)
-            console.log(blob3)
-            getFile("download",blob3,filename)
+            console.log("SetFlag: Chrominum");
+            const blob3 = URL.createObjectURL(blob2);
+            console.log(blob3);
+            getFile("download",blob3,filename);
             //URL.revokeObjectURL(blob3)
         } else {
             chrome.runtime.sendMessage({
@@ -99,14 +99,14 @@ function dlText(){
 }
 
 function dlAttr(){
-    Attr = document.querySelectorAll('[download]')
+    Attr = document.querySelectorAll('[download]');
     if (Attr!= null){
         for (var num = 0; num<Attr.length; num++){
-        s2 = Attr[num].getAttribute('href')
-        t = Attr[num].getAttribute('download')
-        query=getFilename(-2) + '.' + getExttype(s2)
-        filename = query.replaceAll('$AttrName$',t)
-        getFile("download", s2, filename)
+            s2 = Attr[num].getAttribute('href');
+            t = Attr[num].getAttribute('download');
+            query=getFilename(-2) + '.' + getExttype(s2);
+            filename = query.replaceAll('$AttrName$',t);
+            getFile("download", s2, filename);
         }
     }
 }
@@ -134,7 +134,7 @@ function dl(){
 function isChrominum(){
     var s = chrome.runtime.getURL("")
     if ( /chrome/.test(s) == true ) {
-        return true
+        return true;
     }
     else return false;
 }
@@ -147,17 +147,17 @@ chrome.runtime.onMessage.addListener(function(request,sender){
             return chrome.runtime.sendMessage({type: "set"});
         } 
         else{
-            globalThis.macro=str.macro
-            globalThis.macro2=str.macro2
-            globalThis.macro3=str.macro3
-            dl()
+            globalThis.macro=str.macro;
+            globalThis.macro2=str.macro2;
+            globalThis.macro3=str.macro3;
+            dl();
             if(str.savetext == true){
-                console.log("Enabled SaveText")
-                dlText()
+                console.log("Enabled SaveText");
+                dlText();
             }
             if(str.saveattr == true){
-                console.log("Enabled SaveAttributes")
-                dlAttr()
+                console.log("Enabled SaveAttributes");
+                dlAttr();
             }
         }
     })
