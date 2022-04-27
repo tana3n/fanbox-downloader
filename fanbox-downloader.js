@@ -22,6 +22,11 @@ function getFilename2(query){
     query=query.replaceAll('$fanboxID$',getfanboxID())
     query=query.replaceAll('$Title$',getTitle())
     query=query.replaceAll('$PageID$',getPageID())
+    query=query.replaceAll('$YYYY$',getDate(1))
+    query=query.replaceAll('$MM$',getDate(2))
+    query=query.replaceAll('$DD$',getDate(3))
+    query=query.replaceAll('$hh$',getDate(4))
+    query=query.replaceAll('$mm$',getDate(5))
     query=query.replaceAll(':',"：")
     return query.replaceAll('/\//g',"／")
 }
@@ -39,6 +44,11 @@ function getFilename(diff){
     return query
 }
 
+function getDate(query){
+    src = document.querySelector(".sc-1vjtieq-3.emomCe").innerText;
+    replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
+    return replaced[query].padStart(2,'0');
+}
 function getExttype(URL){
     return URL.split("/").reverse()[0].split('.')[1];
 }
