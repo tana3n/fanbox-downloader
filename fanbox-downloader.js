@@ -55,9 +55,10 @@ function getSrcURL(getnum){
 function getText(){
     if (document.querySelector('.sc-16ys89y-0')) {
         text = document.querySelector('.sc-16ys89y-0').innerHTML
-    } else {
-        s=document.querySelector('.sc-1vjtieq-1').querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
+    } else if(document.querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")){
+        s=document.querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")
         const texts=[]
+        
         for(var num = 0; num < s.length ; num++){
             texts.push(s[num].textContent);
         }
