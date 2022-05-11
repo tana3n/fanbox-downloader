@@ -13,11 +13,12 @@ label, input[type='checkbox'] {
 .macrolist{
     border-collapse: collapse;
     border: 2px;
-    background-color: #e6e6fa;
+    background-color: #ffe9b1;
 }
 .list-t{
-    background-color: #ff99cf;
+    background-color: #f8a63a;
     border: 2px #ffffff;
-
 }
-
+body{
+    font-size: 14px;
+}
