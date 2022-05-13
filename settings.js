@@ -44,6 +44,7 @@ function initialize_settings(){
     document.getElementById('macro').value = "fanbox-downloader/$fanboxname$($fanboxID$)/[$YYYY28$$MM28$$DD28$_$hh28$$mm$]$fanboxname$($fanboxID$) - $Title$($PageID$)";
     document.getElementById('macro2').value = "fanbox-downloader/$fanboxname$($fanboxID$)/[$YYYY28$$MM28$$DD28$_$hh28$$mm$]$fanboxname$($fanboxID$) - $Title$($PageID$) [$Diff$ - $DiffCount$]";
     document.getElementById('macro3').value = "fanbox-downloader/$fanboxname$($fanboxID$)/[$YYYY28$$MM28$$DD28$_$hh28$$mm$]$fanboxname$($fanboxID$) - $Title$($PageID$) - $AttrName$";
+    save_settings();
 }
 
 document.addEventListener('DOMContentLoaded', load_settings);
