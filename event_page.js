@@ -1,7 +1,7 @@
 //コンテキスト表示
 chrome.contextMenus.create({
     'id' : "fbdl",
-    'title' : 'fanbox-downloader',
+    'title' : 'このページを保存',
     'type' : 'normal',
     "contexts" : ["page"],
     "documentUrlPatterns" : ["https://*.fanbox.cc/posts/*","https://*.fanbox.cc/*/posts/*"]
