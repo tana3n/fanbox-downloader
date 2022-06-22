@@ -74,12 +74,12 @@ function getExttype(URL){
 }
 
 function getDiff(){
-    a=document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1').length;
+    a=document.querySelector('.sc-1vjtieq-0').querySelectorAll('.sc-xvj0xk-1').length;
     return (''+a).padStart(2,'0');
 }
 
 function getSrcURL(getnum){
-    return  document.querySelector('.sc-1vjtieq-5').querySelectorAll('.sc-xvj0xk-1')[getnum].getAttribute('href');
+    return  document.querySelector('.sc-1vjtieq-0').querySelectorAll('.sc-xvj0xk-1')[getnum].getAttribute('href');
 }
 
 function getText(){
