@@ -77,7 +77,7 @@ function getExttype(URL){
 function getDiff(){
     let a = document.querySelector(".DraftEditor-root");
     if (a == null){
-        a = document.querySelector("article").querySelectorAll("a");
+        a = document.querySelector("article").querySelectorAll(".PostImage__Anchor-sc-xvj0xk-1");
     } else{
         a = document.querySelector(".DraftEditor-root").querySelectorAll(".PostImage__Wrapper-sc-xvj0xk-0");
     }
@@ -88,7 +88,7 @@ function getDiff(){
 function getSrcURL(getnum){
     let a = document.querySelector(".DraftEditor-root");//figure
     if (a == null){
-        a = document.querySelector("article").querySelectorAll("a")[getnum].getAttribute('href');
+        a = document.querySelector("article").querySelectorAll(".PostImage__Anchor-sc-xvj0xk-1")[getnum].getAttribute('href');
     } else{
         a = document.querySelector(".DraftEditor-root").querySelectorAll(".PostImage__Wrapper-sc-xvj0xk-0")[getnum].querySelector("a").getAttribute("href");
     }
@@ -97,7 +97,9 @@ function getSrcURL(getnum){
 
 function getText(){
     if (document.querySelector('.sc-16ys89y-0')) {
-        text = document.querySelector('.sc-16ys89y-0').innerHTML;
+        text = document.querySelector('.sc-16ys89y-0').innerHTML; 
+    } else if (document.querySelector(".Body__PostBodyText-sc-16ys89y-0") ){
+        text = document.querySelector(".Body__PostBodyText-sc-16ys89y-0").innerHTML;
     } else if(document.querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr")){
         s=document.querySelectorAll(".public-DraftStyleDefault-block.public-DraftStyleDefault-ltr");
         const texts=[];
