@@ -38,8 +38,9 @@ function getFilename2(query){
 }
 
 function getFilename(diff){
+    let query;
     if (getDiff() > 1 & diff >= 0) {
-        var query=getFilename2(macro2);
+        query=getFilename2(macro2);
         query=query.replaceAll('$DiffCount$',getDiff());
         query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'));
     } else if (getDiff()==1 |diff == -1) {
@@ -51,7 +52,7 @@ function getFilename(diff){
 }
 
 function getDate(query, custom){
-    src = document.querySelector(".styled__PostHeadBottom-sc-1vjtieq-3").innerText;
+    let src = document.querySelector(".styled__PostHeadBottom-sc-1vjtieq-3").innerText;
     replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
     replaced[2] = parseInt(replaced[2]) - 1;
     if( (custom == true) & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして+24hする
@@ -74,12 +75,24 @@ function getExttype(URL){
 }
 
 function getDiff(){
-    let a = document.querySelector(".DraftEditor-root").querySelectorAll("img").length;
+    let a = document.querySelector(".DraftEditor-root");
+    if (a == null){
+        a = document.querySelector("article").querySelectorAll("a");
+    } else{
+        a = document.querySelector(".DraftEditor-root").querySelectorAll(".PostImage__Wrapper-sc-xvj0xk-0");
+    }
+    a = a.length;
     return (''+a).padStart(2,'0');
 }
 
 function getSrcURL(getnum){
-    return document.querySelector(".DraftEditor-root").querySelectorAll("img")[getnum].getAttribute('src');
+    let a = document.querySelector(".DraftEditor-root");//figure
+    if (a == null){
+        a = document.querySelector("article").querySelectorAll("a")[getnum].getAttribute('href');
+    } else{
+        a = document.querySelector(".DraftEditor-root").querySelectorAll(".PostImage__Wrapper-sc-xvj0xk-0")[getnum].querySelector("a").getAttribute("href");
+    }
+    return a;
 }
 
 function getText(){
@@ -100,7 +113,7 @@ function getText(){
 function dlText(){
     if(getText()!=""){
         const blob2 = new Blob([getText()], { type: "text/plain" });
-        var filename = getFilename(-1) + ".txt";
+        const filename = getFilename(-1) + ".txt";
         if (isChrominum() == true ){
             console.log("SetFlag: Chrominum");
             const blob3 = URL.createObjectURL(blob2);
@@ -140,19 +153,19 @@ function getFile(type, url, filename){
 }
 
 function dl(){
-    var diff = getDiff();
+    const diff = getDiff();
     for(var num = 0; num < diff ; num++){
-        var url = getSrcURL(num);
-        var filename = getFilename(num) + '.' + getExttype(url);
-        console.log(filename);
+        const url = getSrcURL(num);
         console.log(url);
+        const filename = getFilename(num) + '.' + getExttype(url);
+        console.log(filename);
         getFile("download",url,filename);
     }
 }
 
 
 function isChrominum(){
-    var s = chrome.runtime.getURL("")
+    const s = chrome.runtime.getURL("")
     if ( /chrome/.test(s) == true ) {
         return true;
     }
