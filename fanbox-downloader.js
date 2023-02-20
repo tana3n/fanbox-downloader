@@ -51,7 +51,7 @@ function getFilename(diff){
 }
 
 function getDate(query, custom){
-    src = document.querySelector(".sc-1vjtieq-3.emomCe").innerText;
+    src = document.querySelector(".styled__PostHeadBottom-sc-1vjtieq-3").innerText;
     replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
     replaced[2] = parseInt(replaced[2]) - 1;
     if( (custom == true) & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして+24hする
@@ -74,12 +74,12 @@ function getExttype(URL){
 }
 
 function getDiff(){
-    a=document.querySelector('.sc-1vjtieq-0').querySelectorAll('.sc-xvj0xk-1').length;
+    let a = document.querySelector(".DraftEditor-root").querySelectorAll("img").length;
     return (''+a).padStart(2,'0');
 }
 
 function getSrcURL(getnum){
-    return  document.querySelector('.sc-1vjtieq-0').querySelectorAll('.sc-xvj0xk-1')[getnum].getAttribute('href');
+    return document.querySelector(".DraftEditor-root").querySelectorAll("img")[getnum].getAttribute('src');
 }
 
 function getText(){
