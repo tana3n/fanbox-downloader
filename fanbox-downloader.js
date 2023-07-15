@@ -111,7 +111,6 @@ function getText(){
     }
     return text;
 }
-
 function dlText(){
     if(getText()!=""){
         const blob2 = new Blob([getText()], { type: "text/plain" });
@@ -133,36 +132,43 @@ function dlText(){
     }
 }
 
-function dlAttr(){
+async function dlAttr(){
     Attr = document.querySelectorAll('[download]');
     if (Attr!= null){
         for (var num = 0; num<Attr.length; num++){
-            s2 = Attr[num].getAttribute('href');
-            t = Attr[num].getAttribute('download');
-            query=getFilename(-2) + '.' + getExttype(s2);
-            filename = query.replaceAll('$AttrName$',t);
-            getFile("download", s2, filename);
+                s2 = Attr[num].getAttribute('href');
+                t = Attr[num].getAttribute('download');
+                query=getFilename(-2) + '.' + getExttype(s2);
+                filename = query.replaceAll('$AttrName$',t);
+                getFile("download", s2, filename);
+                await new Promise((s)=>{
+                    setTimeout(s, 150);
+            });
+
         }
     }
 }
 
 function getFile(type, url, filename){
-    return chrome.runtime.sendMessage({
+    chrome.runtime.sendMessage({
      type: type,
      url: url,
      filename: filename
-    });
+    })
 }
 
-function dl(){
-    const diff = getDiff();
+async function dlimg(){
+    diff = getDiff()
     for(var num = 0; num < diff ; num++){
         const url = getSrcURL(num);
         console.log(url);
         const filename = getFilename(num) + '.' + getExttype(url);
         console.log(filename);
-        getFile("download",url,filename);
-    }
+        await new Promise((s)=>{
+            getFile("download",url,filename);
+            setTimeout(s, 150);
+           });
+        }
 }
 
 
@@ -173,28 +179,33 @@ function isChrominum(){
     }
     else return false;
 }
+async function main(str){
+    globalThis.macro=str.macro;
+    globalThis.macro2=str.macro2;
+    globalThis.macro3=str.macro3;
+    
+    dlimg();
 
+    if(str.savetext == true){
+        console.log("Enabled SaveText");
+        dlText();
+    }
+    if(str.saveattr == true){
+        console.log("Enabled SaveAttributes");
+        dlAttr();
+    }
+    
+}
 
 chrome.runtime.onMessage.addListener(function(request,sender){
     chrome.storage.local.get(['savetext','saveattr', 'macro', 'macro2', 'macro3'],function(str){
+
         if (str.macro==undefined) {
             alert("fanbox-downloader：オプションから設定を行ってください");    
             return chrome.runtime.sendMessage({type: "set"});
         } 
         else{
-            globalThis.macro=str.macro;
-            globalThis.macro2=str.macro2;
-            globalThis.macro3=str.macro3;
-            dl();
-            if(str.savetext == true){
-                console.log("Enabled SaveText");
-                dlText();
-            }
-            if(str.saveattr == true){
-                console.log("Enabled SaveAttributes");
-                dlAttr();
-            }
+            main(str);
         }
-    })
-}
-)
+    });
+})

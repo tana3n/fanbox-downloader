@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener(function(request) {
     download(request.url,request.filename);
     }
   else if(request.type=="blob"){
-
+    console.log(request.filename);
     const blob = URL.createObjectURL(request.blob);
     download(blob,request.filename);
   }
@@ -37,7 +37,8 @@ chrome.runtime.onMessage.addListener(function(request) {
 
 function download(url,filename){
   chrome.downloads.download({
-    url: url,
-    filename: filename
-    });
+  url: url,
+  filename: filename,
+  saveAs: false
+  });
 }
