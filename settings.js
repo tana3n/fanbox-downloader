@@ -51,4 +51,3 @@ document.addEventListener('DOMContentLoaded', load_settings);
 document.getElementById('save').addEventListener('click',save_settings);
 document.getElementById('reset').addEventListener('click',initialize_settings);
 document.getElementById('reload').addEventListener('click',load_settings);
-document.getElementById('clear').addEventListener('click',clear_settings);
