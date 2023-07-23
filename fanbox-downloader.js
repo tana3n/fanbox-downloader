@@ -1,6 +1,11 @@
+// fanbox-downloaer
+
+// Unique Functions
+// Get Page Information
 function getfanboxName(){
     return document.querySelector('h1 a').text;
 }
+
 function getfanboxID(){
     if (location.hostname==("www.fanbox.cc")){
         s=location.pathname.match(/(?<=@)(.*)(?=\/posts)/);//@以降を取得
@@ -9,69 +14,14 @@ function getfanboxID(){
         return location.hostname.replace('.fanbox.cc','');//こっちはサブドメインを取得すればOK
     }
 }
+
 function getPageID(){
     pageID=location.pathname.match(/(?<=\/posts\/)[0-9]*/);
     return pageID[0];
 }
+
 function getTitle(){
     return document.querySelector("article h1").textContent.replace(/\u002f/g, '／');
-}
-
-function getFilename2(query){
-    query=query.replaceAll('$fanboxname$',getfanboxName());
-    query=query.replaceAll('$fanboxID$',getfanboxID());
-    query=query.replaceAll('$Title$',getTitle());
-    query=query.replaceAll('$PageID$',getPageID());
-    query=query.replaceAll('$YYYY$',getDate(1));
-    query=query.replaceAll('$YY$',getDate(1).slice(-2));
-    query=query.replaceAll('$MM$',getDate(2));
-    query=query.replaceAll('$DD$',getDate(3));
-    query=query.replaceAll('$hh$',getDate(4));
-    query=query.replaceAll('$YYYY28$',getDate(1,true));
-    query=query.replaceAll('$YY28$',getDate(1,true).slice(-2));
-    query=query.replaceAll('$MM28$',getDate(2,true));
-    query=query.replaceAll('$DD28$',getDate(3,true));
-    query=query.replaceAll('$hh28$',getDate(4,true));
-    query=query.replaceAll('$mm$',getDate(5));
-    query=query.replaceAll(':',"：");
-    return query.replaceAll('/\//g',"／");
-}
-
-function getFilename(diff){
-    let query;
-    if (getDiff() > 1 & diff >= 0) {
-        query=getFilename2(macro2);
-        query=query.replaceAll('$DiffCount$',getDiff());
-        query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'));
-    } else if (getDiff()==1 |diff == -1) {
-        query = getFilename2(macro);
-    } else if (diff == -2) {
-        query = getFilename2(macro3);
-    }
-    return query;
-}
-
-function getDate(query, custom){
-    let src = document.querySelector(".styled__PostHeadBottom-sc-1vjtieq-3").innerText;
-    replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
-    replaced[2] = parseInt(replaced[2]) - 1;
-    if( (custom == true) & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして+24hする
-            replaced[3] = parseInt(replaced[3]) - 1;
-            replaced[4] = parseInt(replaced[4]) + 24;
-    }
-    dates = new Date(replaced[1],replaced[2],replaced[3]);//補正用
-    replaced =[
-        replaced[0],
-        dates.getFullYear().toString(),
-        (parseInt(dates.getMonth())+ 1).toString(),
-        dates.getDate().toString(),
-        replaced[4].toString(),
-        replaced[5].toString()
-        ];
-    return replaced[query].padStart(2,'0');
-}
-function getExttype(URL){
-    return URL.split("/").reverse()[0].split('.')[1];
 }
 
 function getDiff(){
@@ -149,14 +99,6 @@ async function dlAttr(){
     }
 }
 
-function getFile(type, url, filename){
-    chrome.runtime.sendMessage({
-     type: type,
-     url: url,
-     filename: filename
-    })
-}
-
 async function dlimg(){
     diff = getDiff()
     for(var num = 0; num < diff ; num++){
@@ -172,6 +114,77 @@ async function dlimg(){
 }
 
 
+function getDate(query, custom){
+    let src = document.querySelector(".styled__PostHeadBottom-sc-1vjtieq-3").innerText;
+    replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
+    replaced[2] = parseInt(replaced[2]) - 1;
+    if( (custom == true) & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして+24hする
+            replaced[3] = parseInt(replaced[3]) - 1;
+            replaced[4] = parseInt(replaced[4]) + 24;
+    }
+    dates = new Date(replaced[1],replaced[2],replaced[3]);//補正用
+    replaced =[
+        replaced[0],
+        dates.getFullYear().toString(),
+        (parseInt(dates.getMonth())+ 1).toString(),
+        dates.getDate().toString(),
+        replaced[4].toString(),
+        replaced[5].toString()
+        ];
+    return replaced[query].padStart(2,'0');
+}
+
+
+// Common Functions
+// 
+function getFilename2(query){
+    query=query.replaceAll('$fanboxname$',getfanboxName());
+    query=query.replaceAll('$fanboxID$',getfanboxID());
+    query=query.replaceAll('$Title$',getTitle());
+    query=query.replaceAll('$PageID$',getPageID());
+    query=query.replaceAll('$YYYY$',getDate(1));
+    query=query.replaceAll('$YY$',getDate(1).slice(-2));
+    query=query.replaceAll('$MM$',getDate(2));
+    query=query.replaceAll('$DD$',getDate(3));
+    query=query.replaceAll('$hh$',getDate(4));
+    query=query.replaceAll('$YYYY28$',getDate(1,true));
+    query=query.replaceAll('$YY28$',getDate(1,true).slice(-2));
+    query=query.replaceAll('$MM28$',getDate(2,true));
+    query=query.replaceAll('$DD28$',getDate(3,true));
+    query=query.replaceAll('$hh28$',getDate(4,true));
+    query=query.replaceAll('$mm$',getDate(5));
+    query=query.replaceAll(':',"：");
+    return query.replaceAll('/\//g',"／");
+}
+
+function getFilename(diff){
+    let query;
+    if (getDiff() > 1 & diff >= 0) {
+        query=getFilename2(macro2);
+        query=query.replaceAll('$DiffCount$',getDiff());
+        query=query.replaceAll('$Diff$',(''+(diff+1)).padStart(2,'0'));
+    } else if (getDiff()==1 |diff == -1) {
+        query = getFilename2(macro);
+    } else if (diff == -2) {
+        query = getFilename2(macro3);
+    }
+    return query;
+}
+
+
+// URIから判定する場合
+function getExttype(URL){
+    return URL.split("/").reverse()[0].split('.')[1];
+}
+
+function getFile(type, url, filename){
+    chrome.runtime.sendMessage({
+     type: type,
+     url: url,
+     filename: filename
+    })
+}
+
 function isChrominum(){
     const s = chrome.runtime.getURL("")
     if ( /chrome/.test(s) == true ) {
@@ -179,6 +192,8 @@ function isChrominum(){
     }
     else return false;
 }
+
+
 async function main(str){
     globalThis.macro=str.macro;
     globalThis.macro2=str.macro2;
