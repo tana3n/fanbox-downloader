@@ -118,7 +118,7 @@ function getDate(query, custom){
     let src = document.querySelector(".styled__PostHeadBottom-sc-1vjtieq-3").innerText;
     replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
     replaced[2] = parseInt(replaced[2]) - 1;
-    if( (custom == true) & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして+24hする
+    if( custom & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして+24hする
             replaced[3] = parseInt(replaced[3]) - 1;
             replaced[4] = parseInt(replaced[4]) + 24;
     }
@@ -153,6 +153,12 @@ function getFilename2(query){
     query=query.replaceAll('$DD28$',getDate(3,true));
     query=query.replaceAll('$hh28$',getDate(4,true));
     query=query.replaceAll('$mm$',getDate(5));
+    query=query.replaceAll('$NYYYY28$',getDateNow(1,true));
+    query=query.replaceAll('$NYY28$',getDateNow(1,true).slice(-2));
+    query=query.replaceAll('$NMM28$',getDateNow(2,true));
+    query=query.replaceAll('$NDD28$',getDateNow(3,true));
+    query=query.replaceAll('$Nhh28$',getDateNow(4,true));
+    query=query.replaceAll('$Nmm$',getDateNow(5));
     query=query.replaceAll(':',"：");
     return query.replaceAll('/\//g',"／");
 }
@@ -193,7 +199,33 @@ function isChrominum(){
     else return false;
 }
 
+function getDateNow(query, custom){
+    dateNow = new Date (Date.now());
+    //dateNow = new Date (2023,7 -1 ,1,0,15,23);
 
+    replaced =[
+        dateNow,
+        dateNow.getFullYear().toString(),
+        (dateNow.getMonth() + 1).toString(),
+        dateNow.getDate().toString(),
+        dateNow.getHours().toString(),
+        dateNow.getMinutes().toString()
+        ];
+    if( custom & (replaced[4] < 4) ){//28h表記 4時前ならば1日前にずらして本来の時間+24hにする
+    // 年月日はDateの補正を利用する
+    // 日時は純粋に進めればOKなので出力値を上書き
+        customDate = new Date(replaced[1],replaced[2] - 1 ,replaced[3] -1 );//補正用
+        replaced =[
+            dateNow,//歪んだ値はそのまま入らない（元のまま）
+            customDate.getFullYear().toString(),
+            (customDate.getMonth() + 1).toString(),
+            customDate.getDate().toString(),
+            (dateNow.getHours() + 24).toString(),
+            dateNow.getMinutes().toString()
+        ];
+    }
+        return replaced[query].padStart(2,'0');
+}
 async function main(str){
     globalThis.macro=str.macro;
     globalThis.macro2=str.macro2;
