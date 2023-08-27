@@ -188,7 +188,7 @@ function repFilename(query) {
   for (i = 0; i < hyp_src.length; i++) {
     query = query.replaceAll(hyp_src[i], hyp_rep[i]);
   }
-  return query;
+  return query.replace(/(^\s+)/g, "");
 }
 function getFilename(diff) {
   let query;
