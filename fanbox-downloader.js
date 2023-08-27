@@ -3,7 +3,8 @@
 // Unique Functions
 // Get Page Information
 function getfanboxName() {
-  return document.querySelector("h1 a").text;
+  Name = document.querySelector("h1 a").text;
+  return repFilename(Name);
 }
 
 function getfanboxID() {
@@ -21,9 +22,8 @@ function getPageID() {
 }
 
 function getTitle() {
-  return document
-    .querySelector("article h1")
-    .textContent.replace(/\u002f/g, "／");
+  title = document.querySelector("article h1").textContent;
+  return repFilename(title);
 }
 
 function getDiff() {
@@ -156,6 +156,7 @@ function getDate(query, custom) {
 // Common Functions
 //
 function getFilename2(query) {
+  // Macro処理
   query = query.replaceAll("$fanboxname$", getfanboxName());
   query = query.replaceAll("$fanboxID$", getfanboxID());
   query = query.replaceAll("$Title$", getTitle());
@@ -177,10 +178,18 @@ function getFilename2(query) {
   query = query.replaceAll("$NDD28$", getDateNow(3, true));
   query = query.replaceAll("$Nhh28$", getDateNow(4, true));
   query = query.replaceAll("$Nmm$", getDateNow(5));
-  query = query.replaceAll(":", "：");
-  return query.replaceAll("///g", "／");
+  // ファイル名先頭処理
+  return query.replace(/(^\s+)/g, "");
 }
 
+function repFilename(query) {
+  hyp_src = [":", "/", "\\", "*", "?", '"', "<", ">", "|"];
+  hyp_rep = ["：", "／", "￥", "＊", "？", "”", "＜", "＞", "｜"];
+  for (i = 0; i < hyp_src.length; i++) {
+    query = query.replaceAll(hyp_src[i], hyp_rep[i]);
+  }
+  return query;
+}
 function getFilename(diff) {
   let query;
   if ((getDiff() > 1) & (diff >= 0)) {
