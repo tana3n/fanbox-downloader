@@ -131,9 +131,7 @@ async function dlimg() {
 }
 
 function getDate(query, custom) {
-  let src = document.querySelector(
-    ".styled__PostHeadBottom-sc-1vjtieq-3"
-  ).innerText;
+  let src = document.querySelector(".sc-1vjtieq-3").innerText;
   replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
   replaced[2] = parseInt(replaced[2]) - 1;
   if (custom & (replaced[4] < 4)) {
