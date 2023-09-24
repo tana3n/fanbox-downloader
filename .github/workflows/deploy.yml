@@ -1,0 +1,28 @@
+# This is a basic workflow that is manually triggered
+
+name: Compress to zip
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  push:
+    branches:
+      - master
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Runs a single command using the runners shell
+      - name: checkout master
+        uses: actions/checkout@v4
+      - name: preparate deploy enviroment
+        run: sudo apt update && sudo apt install -y 7zip
+      - name: compressing zip
+        run: bash ./deploy.sh
+      - name: my-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./release/*.zip
+          name: release.zip
