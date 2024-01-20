@@ -131,11 +131,13 @@ async function dlimg() {
 }
 
 function getDate(query, custom) {
-  let src = document.querySelector(
-    ".styled__PostHeadBottom-sc-1vjtieq-3"
-  ).innerText;
-  replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
-  replaced[2] = parseInt(replaced[2]) - 1;
+  if (getDateSourceMethod1() != (undefined && null)) {
+    replaced = getDateSourceMethod1();
+  } else if (getDateSourceMethod2() != (undefined && null)) {
+    replaced = getDateSourceMethod2();
+  } else {
+    replaced = ["", 1970, 0, 1, 0, 0];
+  }
   if (custom & (replaced[4] < 4)) {
     //28h表記 4時前ならば1日前にずらして+24hする
     replaced[3] = parseInt(replaced[3]) - 1;
@@ -151,6 +153,30 @@ function getDate(query, custom) {
     replaced[5].toString(),
   ];
   return replaced[query].padStart(2, "0");
+}
+
+function getDateSourceMethod1() {
+  try {
+    let src = document.querySelector(
+      ".styled__PostHeadBottom-sc-1vjtieq-3"
+    ).innerText;
+    replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
+    replaced[2] = parseInt(replaced[2]) - 1;
+    return replaced;
+  } catch (error) {
+    return undefined;
+  }
+}
+
+function getDateSourceMethod2() {
+  try {
+    let src = document.querySelector(".sc-1vjtieq-3").innerText;
+    replaced = /(\d+)年(\d+)月(\d+)日 (\d+):(\d+)/.exec(src);
+    replaced[2] = parseInt(replaced[2]) - 1;
+    return replaced;
+  } catch (error) {
+    return undefined;
+  }
 }
 
 // Common Functions
